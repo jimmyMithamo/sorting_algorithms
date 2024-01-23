@@ -1,53 +1,63 @@
 #include "sort.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 /**
-  * counting_sort -  sorts an array using counting algorithm.
-  * @array:  array to sort.
-  * @size: length of the array.
-  * Return: Nothing.
-  */
-void counting_sort(int *array, size_t size)
+ * swapme - swap the nodes themselves.
+ * @current: pointer.
+ * @current_old: pointer.
+ * @list: doubly linked list
+ * Return: nothing
+ */
+void swapme(listint_t *current, listint_t *current_old, listint_t **list)
 {
-	unsigned int i = 1;
-	int *count = NULL, k = 0, j = 0;
+	listint_t *temp1 = current->next;
+	listint_t *temp2 = current_old->prev;
 
-	if (array == NULL || size < 2)
+	if (temp1 != NULL)
+		temp1->prev = current_old;
+	if (temp2 != NULL)
+		temp2->next = current;
+	current->prev = temp2;
+	current_old->next = temp1;
+	current->next = current_old;
+	current_old->prev = current;
+	if (*list == current_old)
+		*list = current;
+	print_list(*list);
+}
+
+/**
+ * cocktail_sort_list - cocktail_sort_list
+ *
+ * @list: doubly linked list
+ * Return: nothing
+ */
+void cocktail_sort_list(listint_t **list)
+{
+	listint_t *check = *list, *first = NULL, *last = NULL;
+
+	if (!list)
 		return;
-
-	k = array[0];
-	for (; i < size; i++)
-	{
-		if (array[i] > k)
-			k = array[i];
-	}
-
-	count = malloc(sizeof(int) * (k + 1));
-	if (count == NULL)
+	if (!(*list))
 		return;
-
-	for (j = 0; j <= k; j++)
-		count[j] = 0;
-	for (i = 0; i < size; i++)
-		count[array[i]] += 1;
-	for (j = 0; j < k; j++)
-	{
-		count[j + 1] += count[j];
-		printf("%d, ", count[j]);
-	}
-	count[j + 1] += count[j];
-	printf("%d\n", count[j + 1]);
-	for (i = 0; i < size; i++)
-	{
-		j = count[array[i]] - 1;
-		if (array[i] != array[j])
+	if (!(*list)->next)
+		return;
+	do {
+		while (check->next)
 		{
-			k = array[i];
-			array[i] = array[j];
-			array[j] = k;
+			if (check->n > check->next->n)
+				swapme(check->next, check, list);
+			else
+				check = check->next;
 		}
-	}
-	free(count);
+		last = check;
+		while (check->prev != first)
+		{
+			if (check->n < check->prev->n)
+				swapme(check, check->prev, list);
+			else
+				check = check->prev;
+		}
+		first = check;
+	} while (first != last);
 }
 
