@@ -14,6 +14,8 @@ void selection_sort(int *array, size_t size)
 	size_t i, j, m_index;
 	int temp;
 
+	if (array == NULL || size == 0)
+		return;
 	for (i = 0; i < size - 1; i++)
 	{
 		m_index  = i;

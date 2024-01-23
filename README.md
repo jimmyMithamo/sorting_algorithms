@@ -44,3 +44,8 @@ Prototype: void cocktail_sort_list(listint_t **list);
  function that sorts an array of integers in ascending order using the Counting sort algorithm
 
 Prototype: void counting_sort(int *array, size_t size);
+
+
+Authors:
+James Mithamo
+Doris 
