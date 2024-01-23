@@ -1,5 +1,4 @@
 #include "sort.h"
-#include <stdlib.h>
 
 /**
  * shell_sort -sorts elements in an array
@@ -12,27 +11,30 @@
 
 void shell_sort(int *array, size_t size)
 {
-	size_t i, j;
-	size_t temp, increment;
+	unsigned int i = 0, j = 0, interval = 0;
+	int aux = 0;
 
-	for (increment = size/2; increment < size; increment/=2)
+	if (array == NULL || size < 2)
+		return;
+
+	while (interval < size / 3)
+		interval = interval * 3 + 1;
+
+	for (; interval > 0; interval = (interval - 1) / 3)
 	{
-		for (i = increment; i < size; i++)
+		for (i = interval; i < size; i++)
 		{
-			temp = array[1];
-			for (j = i; j >= increment; j -= increment)
+			aux = array[i];
+			for (j = i; j >= interval && array[j - interval] > aux;
+					j -= interval)
 			{
-				if ((int)temp < array[j - increment])
-				{
-					array[j] = array[j - increment];
-				}
-				else
-				{
-					break;
-				}
+				if (array[j] != array[j - interval])
+					array[j] = array[j - interval];
 			}
-			array[j] = temp;
-		}
-	}
+			if (array[j] != aux)
+				array[j] = aux;
 
+		}
+		print_array(array, size);
+	}
 }
